@@ -15,22 +15,31 @@ A growing company receives thousands of customer support tickets every month thr
 - Lack of centralized reporting system
 - Customer satisfaction inconsistencies
 
-
----
-
 ---
 
 ### Project Overview  
-This project uses two IPL datasets:
+This project dataset:
 
-- matches.csv
-- deliveries.csv
+Dataset: enhanced_customer_support_data.csv
 
+Main Columns:
+
+- Column	
+- Ticket_ID	
+- Customer_Name	
+- Issue_Category	
+- Priority_Level	
+- Ticket_Channel	
+- Submission_Date	
+- Resolution_Time_Hours	
+- Assigned_Agent	
+- Satisfaction_Score
+  
 The goal is to extract insights into:
-- Team performance across IPL seasons 
-- Batting performance and top run scorers 
-- Match-winning patterns and toss impact
-- Overall IPL trends using interactive visual analytics
+- Stores customer support data in PostgreSQL
+- Performs SQL-based business analysis
+- Creates interactive dashboards with filters and slicers
+- Uses Python machine learning to predict future ticket volume
 
 
 ---
@@ -39,177 +48,84 @@ The goal is to extract insights into:
 
 - Create Database
 ```
-CREATE DATABASE IPL_Project;
-USE IPL_Project;
+CREATE DATABASE customer_support_project;
 ```
-- Create Matches Table
+- Create Table
 ```
-CREATE TABLE matches (
-    id INT PRIMARY KEY,
-    season VARCHAR(20),
-    city VARCHAR(100),
-    date DATE,
-    team1 VARCHAR(100),
-    team2 VARCHAR(100),
-    toss_winner VARCHAR(100),
-    toss_decision VARCHAR(20),
-    result VARCHAR(20),
-    dl_applied INT,
-    winner VARCHAR(100),
-    win_by_runs INT,
-    win_by_wickets INT,
-    player_of_match VARCHAR(100),
-    venue VARCHAR(255),
-    umpire1 VARCHAR(100),
-    umpire2 VARCHAR(100),
-    umpire3 VARCHAR(100)
+CREATE TABLE support_tickets (
+    ticket_id VARCHAR(20),
+    customer_name VARCHAR(100),
+    customer_email VARCHAR(150),
+    ticket_subject TEXT,
+    ticket_description TEXT,
+    issue_category VARCHAR(100),
+    priority_level VARCHAR(50),
+    ticket_channel VARCHAR(50),
+    submission_date DATE,
+    resolution_time_hours NUMERIC,
+    assigned_agent VARCHAR(100),
+    satisfaction_score INTEGER
 );
-```
-- Create Deliveries Table
-```
-CREATE TABLE deliveries (
-    match_id INT,
-    inning INT,
-    batting_team VARCHAR(100),
-    bowling_team VARCHAR(100),
-    over_no INT,
-    ball INT,
-    batsman VARCHAR(100),
-    non_striker VARCHAR(100),
-    bowler VARCHAR(100),
-    is_super_over INT,
-    wide_runs INT,
-    bye_runs INT,
-    legbye_runs INT,
-    noball_runs INT,
-    penalty_runs INT,
-    batsman_runs INT,
-    extra_runs INT,
-    total_runs INT,
-    player_dismissed VARCHAR(100),
-    dismissal_kind VARCHAR(100),
-    fielder VARCHAR(100)
-);
-```
-### Data Cleaning Queries
-- Check Null Values
-```
-SELECT *
-FROM matches
-WHERE winner IS NULL;
-```
-- Remove Duplicate Matches
-```
-SELECT id, COUNT(*)
-FROM matches
-GROUP BY id
-HAVING COUNT(*) > 1;
-```
-
-- Standardize Team Names
-```
-UPDATE matches
-SET team1 = 'Delhi Capitals'
-WHERE team1 = 'Delhi Daredevils';
 ```
 
 ### SQL Analysis Queries
-- Total Matches Played
+- Total Tickets
 ```
-SELECT COUNT(*) AS total_matches
-FROM matches;
+SELECT COUNT(*) AS total_tickets
+FROM support_tickets;
 ```
-
-- Matches Won by Each Team
+- Tickets by Priority
 ```
-SELECT winner, COUNT(*) AS wins
-FROM matches
-GROUP BY winner
-ORDER BY wins DESC;
-
-``` 
-- Top 10 Run Scorers
-```
-SELECT batsman,
-       SUM(batsman_runs) AS total_runs
-FROM deliveries
-GROUP BY batsman
-ORDER BY total_runs DESC
-LIMIT 10;
-
-```
-- Top Wicket Takers
-```
-SELECT bowler,
-       COUNT(player_dismissed) AS wickets
-FROM deliveries
-WHERE dismissal_kind NOT IN ('run out', 'retired hurt')
-GROUP BY bowler
-ORDER BY wickets DESC
-LIMIT 10;
-
-```
-- Highest Team Score
-```
-SELECT match_id,
-       batting_team,
-       SUM(total_runs) AS total_score
-FROM deliveries
-GROUP BY match_id, batting_team
-ORDER BY total_score DESC
-LIMIT 10;
-```
-- Toss Impact Analysis
-```
-SELECT toss_decision,
-       COUNT(*) AS matches,
-       SUM(CASE WHEN toss_winner = winner THEN 1 ELSE 0 END) AS toss_and_match_won
-FROM matches
-GROUP BY toss_decision;
-
-```
-- Most Player of the Match Awards
-```
-SELECT player_of_match,
-       COUNT(*) AS awards
-FROM matches
-GROUP BY player_of_match
-ORDER BY awards DESC
-LIMIT 10;
+SELECT priority_level,
+       COUNT(*) AS total_tickets
+FROM support_tickets
+GROUP BY priority_level
+ORDER BY total_tickets DESC;
 
 ```
 
-- Best Strike Rate Players
+- Average Resolution Time
 ```
-SELECT batsman,
-       SUM(batsman_runs) AS runs,
-       COUNT(ball) AS balls,
-       ROUND((SUM(batsman_runs) * 100.0 / COUNT(ball)),2) AS strike_rate
-FROM deliveries
-GROUP BY batsman
-HAVING runs > 1000
-ORDER BY strike_rate DESC;
+SELECT ROUND(AVG(resolution_time_hours),2) AS avg_resolution_time
+FROM support_tickets;
+```
+- Best Performing Agents
+```
+SELECT assigned_agent,
+       ROUND(AVG(satisfaction_score),2) AS avg_rating,
+       COUNT(ticket_id) AS resolved_tickets
+FROM support_tickets
+GROUP BY assigned_agent
+ORDER BY avg_rating DESC;
 
 ```
-- Economy Rate of Bowlers
-```
-SELECT bowler,
-       ROUND(SUM(total_runs) * 6.0 / COUNT(ball),2) AS economy
-FROM deliveries
-GROUP BY bowler
-HAVING COUNT(ball) > 300
-ORDER BY economy ASC;
 
+- Monthly Ticket Trend
 ```
-- Venue-wise Match Count
-```
-SELECT venue,
-       COUNT(*) AS total_matches
-FROM matches
-GROUP BY venue
-ORDER BY total_matches DESC;
+SELECT DATE_TRUNC('month', submission_date) AS month,
+       COUNT(*) AS total_tickets
+FROM support_tickets
+GROUP BY month
+ORDER BY month;
 
 ``` 
+- High Priority Tickets
+```
+SELECT *
+FROM support_tickets
+WHERE priority_level = 'High';
+
+```
+- Channel Performance
+```
+SELECT ticket_channel,
+       ROUND(AVG(resolution_time_hours),2) AS avg_resolution_time,
+       ROUND(AVG(satisfaction_score),2) AS avg_satisfaction
+FROM support_tickets
+GROUP BY ticket_channel;
+
+```
+
 ### Data Transformation  
 Using **Power Query** and **DAX**, the data was transformed to calculate:  
 - Total Runs

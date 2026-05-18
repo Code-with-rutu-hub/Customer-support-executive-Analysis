@@ -296,10 +296,11 @@ print(os.getcwd())
 ```
 
 ### Insights & Findings  
-1. **Mumbai Indians and Chennai Super Kings are among the most successful IPL teams.
-2. **Winning the toss and choosing to field gives a higher success rate in some seasons.  
-3. **Virat Kohli, David Warner, and Suresh Raina are top consistent scorers.
-4. **Some venues heavily favor chasing teams. 
+1. **Identified that High and Medium priority tickets formed the majority of customer requests.
+2. **Discovered that longer resolution times reduced customer satisfaction.  
+3. **Detected recurring issue categories causing high ticket volumes.
+4. **Average resolution time remained around:39 hours
+5. **Critical tickets were fewer but required immediate attention.
 
 
 ---

@@ -290,8 +290,6 @@ print(os.getcwd())
 
 
 
-<img width="752" height="349" alt="image" src="https://github.com/user-attachments/assets/86180e2d-48f9-4acc-916b-56fc8465cc97" />
-
 
 
 

@@ -275,8 +275,7 @@ future_months['Submission_Date'] = pd.date_range(
 print(future_months)
 ----
 
-
-- Save Forecast to csv
+- Save CSV
 ```
 future_months.to_csv(
     'ticket_predictions.csv',
@@ -285,15 +284,7 @@ future_months.to_csv(
 
 print("CSV file saved successfully")
 
-```
-
-- Check File Exists
-```
-import os
-
-print(os.getcwd())
-
-```
+---
 
 ### Insights & Findings  
 1. **Identified that High and Medium priority tickets formed the majority of customer requests.
@@ -307,17 +298,23 @@ print(os.getcwd())
 
 ### Recommendations  
 
-#### 1. Teams should prioritize players with consistently high strike rates and match-winning contributions across seasons.
+#### 1.Improve response efficiency by reducing average ticket resolution time.
 
-#### 2. Toss decisions should be optimized based on venue trends and historical chase/defend success rates.
+#### 2.Implement automated ticket prioritization for Critical and High-priority issues.
 
-#### 3. Bowlers with low economy rates in death overs should be utilized more effectively in high-pressure situations.
+#### 3. Introduce AI/chatbot support for handling repetitive customer queries.
 
-#### 4. Teams should focus on boundary efficiency (4s and 6s) as it strongly impacts total score and win probability.
+#### 4.Create SLA alerts and escalation workflows for delayed tickets.
 
 ---
 
 ### Future Work
-* Predict Match Winner : Use Python + Machine Learning Algorithms.
-* Player Recommendation System : Recommend best batsman/bowler based on conditions.
-* Live IPL Dashboard : Connect Power BI with APIs.
+* Integrate real-time streaming data for live customer support monitoring.
+* Implement advanced machine learning models for more accurate ticket forecasting.
+* Add sentiment analysis on customer messages using NLP techniques.
+
+
+
+
+
+

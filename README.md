@@ -155,6 +155,14 @@ CALCULATE(
 
 
 ### Power BI Dashboard  
+
+<img width="951" height="589" alt="image" src="https://github.com/user-attachments/assets/182eba9d-ba52-44e7-ab80-639bc90387e4" />
+
+------
+
+<img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
+
+------
 - Install Libraries
 ```
 pip install pandas sqlalchemy psycopg2-binary scikit-learn matplotlib jupyter
@@ -183,13 +191,7 @@ print(monthly)
 
 ```
 
-<img width="951" height="589" alt="image" src="https://github.com/user-attachments/assets/182eba9d-ba52-44e7-ab80-639bc90387e4" />
 
-------
-
-<img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
-
-------
 
 ## Create Machine Learning Features
 - Create Month Numbers

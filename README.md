@@ -165,6 +165,9 @@ CALCULATE(
 ------
 
 ## Python Forcast
+
+<img width="768" height="342" alt="image" src="https://github.com/user-attachments/assets/4f3edb27-e099-4b77-9892-c24ee73ffc3c" />
+
 - Install Libraries
 ```
 pip install pandas sqlalchemy psycopg2-binary scikit-learn matplotlib jupyter
@@ -291,27 +294,6 @@ import os
 print(os.getcwd())
 
 ```
-
-<img width="768" height="342" alt="image" src="https://github.com/user-attachments/assets/c9a969f3-2740-4f65-8d04-a3d1b1fb82ee" />
-
-
-------
-
-<img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
-
-------
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### Insights & Findings  
 1. **Mumbai Indians and Chennai Super Kings are among the most successful IPL teams.

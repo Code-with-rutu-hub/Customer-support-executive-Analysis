@@ -1,1 +1,305 @@
-# Customer-support-executive-Analysis
+# Customer Support Analytics Project
+Customer Support Intelligence Dashboard & Future Ticket Prediction System
+Power BI +SQL Project 
+
+
+---
+
+### Business Problem
+A growing company receives thousands of customer support tickets every month through multiple channels such as email, chat, and calls. Management faces the following challenges:
+
+- High ticket resolution time
+- Increasing number of unresolved high-priority tickets 
+- Poor visibility into agent performance
+- Difficulty predicting future support workload
+- Lack of centralized reporting system
+- Customer satisfaction inconsistencies
+
+
+---
+
+---
+
+### Project Overview  
+This project uses two IPL datasets:
+
+- matches.csv
+- deliveries.csv
+
+The goal is to extract insights into:
+- Team performance across IPL seasons 
+- Batting performance and top run scorers 
+- Match-winning patterns and toss impact
+- Overall IPL trends using interactive visual analytics
+
+
+---
+
+### SQL Database
+
+- Create Database
+```
+CREATE DATABASE IPL_Project;
+USE IPL_Project;
+```
+- Create Matches Table
+```
+CREATE TABLE matches (
+    id INT PRIMARY KEY,
+    season VARCHAR(20),
+    city VARCHAR(100),
+    date DATE,
+    team1 VARCHAR(100),
+    team2 VARCHAR(100),
+    toss_winner VARCHAR(100),
+    toss_decision VARCHAR(20),
+    result VARCHAR(20),
+    dl_applied INT,
+    winner VARCHAR(100),
+    win_by_runs INT,
+    win_by_wickets INT,
+    player_of_match VARCHAR(100),
+    venue VARCHAR(255),
+    umpire1 VARCHAR(100),
+    umpire2 VARCHAR(100),
+    umpire3 VARCHAR(100)
+);
+```
+- Create Deliveries Table
+```
+CREATE TABLE deliveries (
+    match_id INT,
+    inning INT,
+    batting_team VARCHAR(100),
+    bowling_team VARCHAR(100),
+    over_no INT,
+    ball INT,
+    batsman VARCHAR(100),
+    non_striker VARCHAR(100),
+    bowler VARCHAR(100),
+    is_super_over INT,
+    wide_runs INT,
+    bye_runs INT,
+    legbye_runs INT,
+    noball_runs INT,
+    penalty_runs INT,
+    batsman_runs INT,
+    extra_runs INT,
+    total_runs INT,
+    player_dismissed VARCHAR(100),
+    dismissal_kind VARCHAR(100),
+    fielder VARCHAR(100)
+);
+```
+### Data Cleaning Queries
+- Check Null Values
+```
+SELECT *
+FROM matches
+WHERE winner IS NULL;
+```
+- Remove Duplicate Matches
+```
+SELECT id, COUNT(*)
+FROM matches
+GROUP BY id
+HAVING COUNT(*) > 1;
+```
+
+- Standardize Team Names
+```
+UPDATE matches
+SET team1 = 'Delhi Capitals'
+WHERE team1 = 'Delhi Daredevils';
+```
+
+### SQL Analysis Queries
+- Total Matches Played
+```
+SELECT COUNT(*) AS total_matches
+FROM matches;
+```
+
+- Matches Won by Each Team
+```
+SELECT winner, COUNT(*) AS wins
+FROM matches
+GROUP BY winner
+ORDER BY wins DESC;
+
+``` 
+- Top 10 Run Scorers
+```
+SELECT batsman,
+       SUM(batsman_runs) AS total_runs
+FROM deliveries
+GROUP BY batsman
+ORDER BY total_runs DESC
+LIMIT 10;
+
+```
+- Top Wicket Takers
+```
+SELECT bowler,
+       COUNT(player_dismissed) AS wickets
+FROM deliveries
+WHERE dismissal_kind NOT IN ('run out', 'retired hurt')
+GROUP BY bowler
+ORDER BY wickets DESC
+LIMIT 10;
+
+```
+- Highest Team Score
+```
+SELECT match_id,
+       batting_team,
+       SUM(total_runs) AS total_score
+FROM deliveries
+GROUP BY match_id, batting_team
+ORDER BY total_score DESC
+LIMIT 10;
+```
+- Toss Impact Analysis
+```
+SELECT toss_decision,
+       COUNT(*) AS matches,
+       SUM(CASE WHEN toss_winner = winner THEN 1 ELSE 0 END) AS toss_and_match_won
+FROM matches
+GROUP BY toss_decision;
+
+```
+- Most Player of the Match Awards
+```
+SELECT player_of_match,
+       COUNT(*) AS awards
+FROM matches
+GROUP BY player_of_match
+ORDER BY awards DESC
+LIMIT 10;
+
+```
+
+- Best Strike Rate Players
+```
+SELECT batsman,
+       SUM(batsman_runs) AS runs,
+       COUNT(ball) AS balls,
+       ROUND((SUM(batsman_runs) * 100.0 / COUNT(ball)),2) AS strike_rate
+FROM deliveries
+GROUP BY batsman
+HAVING runs > 1000
+ORDER BY strike_rate DESC;
+
+```
+- Economy Rate of Bowlers
+```
+SELECT bowler,
+       ROUND(SUM(total_runs) * 6.0 / COUNT(ball),2) AS economy
+FROM deliveries
+GROUP BY bowler
+HAVING COUNT(ball) > 300
+ORDER BY economy ASC;
+
+```
+- Venue-wise Match Count
+```
+SELECT venue,
+       COUNT(*) AS total_matches
+FROM matches
+GROUP BY venue
+ORDER BY total_matches DESC;
+
+``` 
+### Data Transformation  
+Using **Power Query** and **DAX**, the data was transformed to calculate:  
+- Total Runs
+```
+Total Runs = SUM(deliveries[total_runs])
+
+```
+- Total Matches
+```
+Total Matches = DISTINCTCOUNT(matches[id])
+
+```
+- Total Sixes
+```
+Total Sixes =
+CALCULATE(
+    COUNTROWS(deliveries),
+    deliveries[batsman_runs] = 6
+)
+
+```
+- Total Fours
+```
+Total Fours =
+CALCULATE(
+    COUNTROWS(deliveries),
+    deliveries[batsman_runs] = 4
+)
+
+```
+- Total Wickets
+```
+Total Wickets =
+COUNT(deliveries[player_dismissed])
+
+```
+
+- Win Percentage
+```
+Win % =
+DIVIDE(
+    COUNT(matches[winner]),
+    DISTINCTCOUNT(matches[id])
+) * 100
+
+```
+### Power BI Data Model
+- Create relationship:
+```
+matches.id  ---> deliveries.match_id
+
+```
+### Relationship Type:
+
+- One to Many
+---
+
+### Power BI Dashboard  
+
+
+<img width="891" height="496" alt="image" src="https://github.com/user-attachments/assets/985f079c-98c0-4f48-b3e0-cbd4e8cc39e9" />
+
+
+
+
+
+---
+
+### Insights & Findings  
+1. **Mumbai Indians and Chennai Super Kings are among the most successful IPL teams.
+2. **Winning the toss and choosing to field gives a higher success rate in some seasons.  
+3. **Virat Kohli, David Warner, and Suresh Raina are top consistent scorers.
+4. **Some venues heavily favor chasing teams. 
+
+
+---
+
+### Recommendations  
+
+#### 1. Teams should prioritize players with consistently high strike rates and match-winning contributions across seasons.
+
+#### 2. Toss decisions should be optimized based on venue trends and historical chase/defend success rates.
+
+#### 3. Bowlers with low economy rates in death overs should be utilized more effectively in high-pressure situations.
+
+#### 4. Teams should focus on boundary efficiency (4s and 6s) as it strongly impacts total score and win probability.
+
+---
+
+### Future Work
+* Predict Match Winner : Use Python + Machine Learning Algorithms.
+* Player Recommendation System : Recommend best batsman/bowler based on conditions.
+* Live IPL Dashboard : Connect Power BI with APIs.

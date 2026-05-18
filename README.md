@@ -128,71 +128,45 @@ GROUP BY ticket_channel;
 
 ### Data Transformation  
 Using **Power Query** and **DAX**, the data was transformed to calculate:  
-- Total Runs
+- Total Tickets
 ```
-Total Runs = SUM(deliveries[total_runs])
+Total Tickets = COUNT(support_tickets[ticket_id])
 
 ```
-- Total Matches
+- Average Satisfaction
 ```
-Total Matches = DISTINCTCOUNT(matches[id])
+Avg Satisfaction = AVERAGE(support_tickets[satisfaction_score])
 
 ```
-- Total Sixes
+- Average Resolution Time
 ```
-Total Sixes =
+Avg Resolution Time = AVERAGE(support_tickets[resolution_time_hours])
+
+```
+- High Priority Tickets
+```
+High Priority Tickets =
 CALCULATE(
-    COUNTROWS(deliveries),
-    deliveries[batsman_runs] = 6
+    COUNT(support_tickets[ticket_id]),
+    support_tickets[priority_level] = "High"
 )
-
-```
-- Total Fours
-```
-Total Fours =
-CALCULATE(
-    COUNTROWS(deliveries),
-    deliveries[batsman_runs] = 4
-)
-
-```
-- Total Wickets
-```
-Total Wickets =
-COUNT(deliveries[player_dismissed])
-
 ```
 
-- Win Percentage
-```
-Win % =
-DIVIDE(
-    COUNT(matches[winner]),
-    DISTINCTCOUNT(matches[id])
-) * 100
 
-```
-### Power BI Data Model
-- Create relationship:
-```
-matches.id  ---> deliveries.match_id
-
-```
-### Relationship Type:
-
-- One to Many
----
 
 ### Power BI Dashboard  
 
 
-<img width="891" height="496" alt="image" src="https://github.com/user-attachments/assets/985f079c-98c0-4f48-b3e0-cbd4e8cc39e9" />
+<img width="944" height="582" alt="image" src="https://github.com/user-attachments/assets/9c04b8ba-ce0c-44df-abdc-65b6916a2f94" />
 
+--------------
 
-
+<img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
 
 
 ---
+
+
 
 ### Insights & Findings  
 1. **Mumbai Indians and Chennai Super Kings are among the most successful IPL teams.

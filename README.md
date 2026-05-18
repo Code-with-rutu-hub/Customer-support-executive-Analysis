@@ -155,16 +155,152 @@ CALCULATE(
 
 
 ### Power BI Dashboard  
+- Install Libraries
+```
+pip install pandas sqlalchemy psycopg2-binary scikit-learn matplotlib jupyter
 
+```
+- import
+```
+import pandas as pd
 
-<img width="944" height="582" alt="image" src="https://github.com/user-attachments/assets/9c04b8ba-ce0c-44df-abdc-65b6916a2f94" />
+df = pd.read_csv("enhanced_customer_support_data.csv")
+df.head()
 
---------------
+```
+- Convert Date Column
+```
+df['Submission_Date'] = pd.to_datetime(df['Submission_Date'])
+
+```
+- Group Monthly Ticket Counts
+```
+monthly = df.groupby(
+    pd.Grouper(key='Submission_Date', freq='ME')
+).size().reset_index(name='ticket_count')
+
+print(monthly)
+
+```
+
+<img width="951" height="589" alt="image" src="https://github.com/user-attachments/assets/182eba9d-ba52-44e7-ab80-639bc90387e4" />
+
+------
 
 <img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
 
+------
+
+## Create Machine Learning Features
+- Create Month Numbers
+```
+monthly['month_number'] = range(1, len(monthly)+1)
+
+X = monthly[['month_number']]
+y = monthly['ticket_count']
+
+print(X.head())
+print(y.head())
+
+```
+- Import ML Library
+```
+from sklearn.linear_model import LinearRegression
+
+```
+- Train Model
+```
+model = LinearRegression()
+
+model.fit(X, y)
+
+```
+- Predict Future Months
+- Create Future Months
+```
+future_months = pd.DataFrame({
+    'month_number': range(len(monthly)+1, len(monthly)+7)
+})
+
+print(future_months)
+
+```
+
+- Predict Future Tickets
+```
+future_predictions = model.predict(future_months)
+
+future_months['predicted_tickets'] = future_predictions
+
+print(future_months)
+
+```
+
+```
+future_dates = pd.date_range(
+    start=monthly['Submission_Date'].max(),
+    periods=7,
+    freq='ME'
+)[1:]
+
+future_months = pd.DataFrame({
+    'Submission_Date': future_dates,
+    'month_number': range(len(monthly)+1, len(monthly)+7)
+})
+
+future_predictions = model.predict(
+    future_months[['month_number']]
+)
+
+future_months['predicted_tickets'] = future_predictions
+
+print(future_months)
+
+```
+- Instead of month numbers, create actual future dates.
+```
+future_months['Submission_Date'] = pd.date_range(
+    start=monthly['Submission_Date'].max(),
+    periods=6,
+    freq='ME'
+)
+
+print(future_months)
+----
+
+
+- Save Forecast to csv
+```
+future_months.to_csv(
+    'ticket_predictions.csv',
+    index=False
+)
+
+print("CSV file saved successfully")
+
+```
+
+- Check File Exists
+```
+import os
+
+print(os.getcwd())
+
+```
+
+
+
+<img width="752" height="349" alt="image" src="https://github.com/user-attachments/assets/86180e2d-48f9-4acc-916b-56fc8465cc97" />
+
+
+--------------
+
+
+
 
 ---
+
+## Python Forecasting
 
 
 

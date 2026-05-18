@@ -163,6 +163,8 @@ CALCULATE(
 <img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
 
 ------
+
+## Python Forcast
 - Install Libraries
 ```
 pip install pandas sqlalchemy psycopg2-binary scikit-learn matplotlib jupyter
@@ -290,7 +292,14 @@ print(os.getcwd())
 
 ```
 
-<img width="768" height="342" alt="image" src="https://github.com/user-attachments/assets/a6aaf2e6-efc6-41f2-a9b5-487b58ad5da3" />
+<img width="768" height="342" alt="image" src="https://github.com/user-attachments/assets/c9a969f3-2740-4f65-8d04-a3d1b1fb82ee" />
+
+
+------
+
+<img width="905" height="496" alt="image" src="https://github.com/user-attachments/assets/797f857a-289d-4480-ab0d-7e3323892b20" />
+
+------
 
 
 
@@ -301,7 +310,6 @@ print(os.getcwd())
 
 
 
-## Python Forecasting
 
 
 

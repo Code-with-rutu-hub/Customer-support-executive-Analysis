@@ -197,6 +197,12 @@ print(monthly)
 
 ```
 
+## Key Influencers — what drives high/low satisfaction
+- Key Influencers works best on a binary outcome rather than a raw continuous score
+```
+Satisfaction_Flag = IF('public support_tickets'[satisfaction_score] <= 2, "Low Satisfaction", "High Satisfaction")
+
+```
 
 
 ## Create Machine Learning Features

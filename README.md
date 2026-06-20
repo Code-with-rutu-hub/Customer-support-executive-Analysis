@@ -161,6 +161,11 @@ Satisfaction_Flag = IF('public support_tickets'[satisfaction_score] <= 2, "Low S
 ```
 
 
+<img width="627" height="363" alt="image" src="https://github.com/user-attachments/assets/58a656c0-02fa-4b42-83b7-0e48888add2f" />
+
+
+<img width="631" height="462" alt="image" src="https://github.com/user-attachments/assets/88d20add-d4c0-4844-ac0a-e2e4818e6c16" />
+
 
 
 
